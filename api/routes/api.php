@@ -24,6 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+Route::get('/images/{path}', function ($path) {
+    return response()->file(storage_path('app/public/images/' . $path));
+})->where('path', '.*');
+
 Route::apiResource('product', ProductController::class);
 Route::apiResource('category', CategoryController::class);
 Route::get('ownership', [ProductController::class, 'ownerShipStatus']);

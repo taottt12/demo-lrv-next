@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ownership_status_id');
             $table->foreign('ownership_status_id')->references('id')->on('ownership_status');
             $table->string('description');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

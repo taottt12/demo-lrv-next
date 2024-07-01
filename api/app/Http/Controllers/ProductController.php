@@ -38,15 +38,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'price' => 'required|numeric|min:1',
-            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0.01', // Minimum price validation, adjust as needed
+            'quantity' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|string',
+            'ownership_status_id' => 'required|exists:ownership_status,id', // Ensure ownership_status_id exists in ownership_status table
             'description' => 'required|string',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required'
         ]);
 
         // Xử lý ảnh
@@ -58,7 +58,10 @@ class ProductController extends Controller
 
         $product = Product::create($validatedData);
 
-        return response()->json($product, 201);
+        return response()->json([
+            'product' => $product,
+            'image_url' => asset('storage/' . $product->image)
+        ], 201);
     }
 
     /**
